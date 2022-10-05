@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const reactionSchema = require('./Reactions')
+const reactionSchema = require('./Reaction')
 
 // virtuals and reactions as well 
 // pay attention and use getter to format Date 
