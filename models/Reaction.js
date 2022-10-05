@@ -1,10 +1,10 @@
-// this is going to be where my schema goes 
 const mongoose = require('mongoose');
 
 const reactionSchema = new mongoose.Schema({
     reactionId: {
         type: Schema.Types.ObjectId,
-        default: () => new mongoose.Types.ObjectId(), // function giving a new object ID. 
+        default: () => new mongoose.Types.ObjectId(),
+        // function giving a new object ID. 
     },
     reactionBody: {
         type: String,
@@ -27,7 +27,6 @@ const reactionSchema = new mongoose.Schema({
         id: false,
     }
 );
-
 
 
 

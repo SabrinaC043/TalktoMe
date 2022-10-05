@@ -1,23 +1,17 @@
 const express = require('express');
-
-
+const routes = require('./routes');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(routes);
 
-const connectionStringURI = `mongodb://127.0.0.1:27017/talkToMe`;
+const db = require('./config/connection');
 
-let db;
-
-mongodb.connect(
-    connectionStringURI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    (err, client) => {
-        db = client.db();
-        app.listen(port, () => {
-            console.log(`Example app listening at http://localhost:${port}`);
-        });
+db.once('open', () => {
+    app.listen(PORT, () => {
+        console.log(`Example app listening at http://localhost:${PORT}`);
     });
+});
