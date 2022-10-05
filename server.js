@@ -1,8 +1,12 @@
 const express = require('express');
-const mongodb = require('mongodb').MongoClient;
 
+
+
+const PORT = process.env.PORT || 3001;
 const app = express();
-const port = 3001;
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const connectionStringURI = `mongodb://127.0.0.1:27017/talkToMe`;
 
@@ -17,6 +21,3 @@ mongodb.connect(
             console.log(`Example app listening at http://localhost:${port}`);
         });
     });
-
-app.use(express.json());
-
