@@ -12,7 +12,7 @@ module.exports = {
     },
 
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.thought })
+        Thought.findOne({ _id: req.params.thought_id })
             .then((thought) => res.json(thought))
             .catch((err) => res.status(404).json(err))
     },
@@ -25,7 +25,7 @@ module.exports = {
 
     putUpdateThought(req, res) {
         Thought.findOneAndUpdate(
-            { _id: req.params.thought },
+            { _id: req.params.thought_id },
             { $set: req.body },
 
         )
@@ -34,12 +34,29 @@ module.exports = {
     },
 
     deleteandRemoveThought(req, res) {
-        Thought.findOneAndDelete({ _id: req.params.thought }).then((thought_id) =>
+        Thought.findOneAndDelete({ _id: req.params.thought_id }).then((thought_id) =>
             !thought_id ? res.status(404).json({ message: "Thought has been deleted" }) : res.json(thought_id))
     },
 
-}
 
+
+    postNewReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thought_id },
+            { $addToSet: { reactions: req.body } },
+            { runValidators: true, new: true }
+        ).then((thought_id) => !thought_id ? res.status(404).json({ message: "No thoughts have been updated" }) : res.json(thought_id))
+
+    },
+    deleteAndRemoveReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thought_id },
+            { $pull: { reactions: { reactionId: req.params.reaction_id } } },
+            { new: true }
+        ).then((thought_id) => !thought_id ? res.status(404).json({ message: "No thoughts have been updated" }) : res.json(thought_id))
+
+    }
+}
 
 
 // GET to get all thoughts
