@@ -16,29 +16,38 @@ module.exports = {
     },
 
     postNewUser(req, res) {
-        // example data
-        // {
-        //     "thoughtText": "Here's a cool thought...",
-        //     "username": "lernantino",
-        //     "userId": "5edff358a0fcb779aa7b118b"
+        User.create(req.body)
+            .then((user) => res.json(user))
+            .catch((err) => res.status(404).json(err))
     },
 
-
-
     putUserId(req, res) {
-
+        User.findOneAndUpdate(
+            { _id: req.params.user_id },
+            { $set: req.body },
+            // {} //validators
+        )
+            .then((user_id) =>
+                !user_id ? res.status(404).json({ message: "No user with this ID" }) : res.json(user_id)
+            )
     },
 
     deleteUserId(req, res) {
-        User.deleteOne()
+        User.deleteOne({ _id: req.params.user_id })
+            .then((user) =>
+                !user ? res.status(404).json({ message: "User with this id has been deleted" })
+                    : Thought.deleteMany({ _id: { $in: user.Thought } })
+            ).then(() => res.json({ message: "User and thoughts have been deleted" }))
     },
 
-    postNewFriend(req, res) {
+    // postNewFriend(req, res) {
+    //     User.findOneAndUpdate()
 
-    },
+    // },
 
     deleteFriend(req, res) {
-
+        User.findOneAndDelete({ _id: req.params.user_id }).then((user_id) =>
+            !user_id ? res.status(404).json({ message: "No friend with this ID" }) : res.json(user_id))
     },
 
 }

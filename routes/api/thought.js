@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const { // functions will be put here 
+const { getAllUsers, getSingleUser, postNewUser, putUserId, deleteUserId, deleteFriend
 
-} = require('../../controllers/userController');
+} = require('../../controllers/thoughtControllers');
 
 
 
