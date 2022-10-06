@@ -40,10 +40,12 @@ module.exports = {
             ).then(() => res.json({ message: "User and thoughts have been deleted" }))
     },
 
-    // postNewFriend(req, res) {
-    //     User.findOneAndUpdate()
-
-    // },
+    postNewFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.user_id },
+            { $in: req.body })
+            .then(() => !user_id ? res.status(404).json({ message: "No new friend post" }) : res.json(user_id))
+    },
 
     deleteFriend(req, res) {
         User.findOneAndDelete({ _id: req.params.user_id }).then((user_id) =>
