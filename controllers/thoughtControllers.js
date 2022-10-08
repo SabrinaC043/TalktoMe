@@ -24,17 +24,18 @@ module.exports = {
     putUpdateThought(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thought_id },
-            { $push: { thought: { thoughtText: req.params.thought_id } } },
+            { $set: req.body },
             { new: true })
             .then((thought_id) => !thought_id ? res.status(404).json({ message: "Thought has not been updated!" })
                 : res.json(thought_id))
+            .catch((err) => res.status(500).json(err));
     },
 
     deleteandRemoveThought(req, res) {
-        Thought.findOneAndUpdate({ _id: req.params.thought_id },
-            { $pull: { thoughts: { thoughtText: req.params.thought_id } } },
-            { new: true }).then((thought_id) =>
+        Thought.deleteOne({ _id: req.params.thought_id })
+            .then((thought_id) =>
                 !thought_id ? res.status(404).json({ message: "Thought has been deleted" }) : res.json(thought_id))
+            .catch((err) => res.status(404).json(err));
     },
 
 
@@ -49,9 +50,8 @@ module.exports = {
             .catch((err) => res.status(500).json(err));
     },
     deleteAndRemoveReaction(req, res) {
-        Thought.findOneAndUpdate(
-            { _id: req.params.thought_id },
-            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        Thought.deleteOne(
+            { _id: req.params.reaction_id },
             { new: true }
         ).then((thought_id) => !thought_id ? res.status(404).json({ message: "Reaction removed" }) : res.json(thought_id))
             .catch((err) => res.status(500).json(err));
