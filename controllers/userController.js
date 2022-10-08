@@ -9,9 +9,14 @@ module.exports = {
 
     getSingleUser(req, res) {
         User.findOne({ _id: req.params.user_id })
-            .select('thoughts').select('friends')
-            .then((user) => !user ? res.status(404) : res.status(200).json(user))
-            .catch((err) => res.status(500).json(err))
+            .select('-__v')
+            .populate('thoughts')
+            .populate('friends')
+            .then((user) => !user ? res.status(404).json({ message: "no user with this id" }) : res.status(200).json(user))
+            .catch((err) => {
+                console.log(err)
+                res.status(500).json(err)
+            })
 
     },
 
@@ -29,7 +34,7 @@ module.exports = {
         )
             .then((user_id) =>
                 !user_id ? res.status(404).json({ message: "No user with this ID" }) : res.json(user_id)
-            )
+            ).catch((err) => res.status(404).json(err))
     },
 
     deleteUserId(req, res) {
@@ -38,18 +43,24 @@ module.exports = {
                 !user ? res.status(404).json({ message: "User with this id has been deleted" })
                     : Thought.deleteMany({ _id: { $in: user.Thought } })
             ).then(() => res.json({ message: "User and thoughts have been deleted" }))
+            .catch((err) => res.status(404).json(err))
     },
 
     postNewFriend(req, res) {
         User.findOneAndUpdate(
             { _id: req.params.user_id },
-            { $in: req.body })
-            .then(() => !user_id ? res.status(404).json({ message: "No new friend post" }) : res.json(user_id))
+            { $push: { friends: req.params.friendId } }
+        )
+            .then((user) => !user ? res.status(404).json({ message: "No new user found" }) : res.json(user))
+            .catch((err) => res.status(404).json(err))
     },
 
     deleteFriend(req, res) {
-        User.findOneAndDelete({ _id: req.params.user_id }).then((user_id) =>
-            !user_id ? res.status(404).json({ message: "No friend with this ID" }) : res.json(user_id))
+        User.findOneAndUpdate(
+            { _id: req.params.user_id },
+            { $pull: { friends: req.params.friendId } }
+        ).then((user_id) =>
+            !user_id ? res.status(404).json({ message: "No user with this ID" }) : res.json(user_id))
     },
 
 }

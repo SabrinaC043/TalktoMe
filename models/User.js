@@ -13,7 +13,7 @@ const userSchema = new Schema(
             required: true,
             unique: true,
             match: [
-                /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+                /.+@.+\..+/,
                 "invalid email entered",
             ],
         },
@@ -46,6 +46,6 @@ userSchema
         return this.friends.length;
     });
 // Initialize our User model
-const User = model("user", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;

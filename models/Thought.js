@@ -14,11 +14,13 @@ const thoughtSchema = new Schema(
             type: Date,
             default: Date.now,
         },
-        username: {
+        username:
+        {
             type: String,
             required: true
         },
         reactions: [reactionSchema]
+
     },
     {
         toJSON: {
@@ -38,7 +40,7 @@ thoughtSchema
         return this.reactions.length;
     })
 
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;
 
