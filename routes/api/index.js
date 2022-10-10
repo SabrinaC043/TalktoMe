@@ -4,7 +4,7 @@ const thoughtRoutes = require('./thought');
 
 
 router.use('/users', userRoutes);
-router.use('/thought', thoughtRoutes);
+router.use('/thoughts', thoughtRoutes);
 
 
 

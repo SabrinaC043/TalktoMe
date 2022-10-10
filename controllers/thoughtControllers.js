@@ -17,7 +17,15 @@ module.exports = {
 
     postNewThought(req, res) {
         Thought.create(req.body)
-            .then((thought) => res.json(thought))
+            .then((thought) => {
+                return User.findOneAndUpdate(
+                    { _id: req.body.userId },
+                    { $push: { thoughts: thought._id } },
+                    { new: true }
+
+                )
+            }).then((user) => !user ? res.status(404).json({ message: "user does not exist" })
+                : res.json(user))
             .catch((err) => res.status(404).json(err))
     },
 
@@ -43,17 +51,17 @@ module.exports = {
     newReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thought_id },
-            { $push: { reactions: { reactionBody: req.body.reactionBody } } },
+            { $push: { reactions: req.body } },
             { new: true }
-        ).populate('reactions')
-            .then((reactions) => !reactions ? res.status(404).json({ message: "No reaction" }) : res.json(reactions))
+        ).then((reactions) => !reactions ? res.status(404).json({ message: "No reaction" }) : res.json(reactions))
             .catch((err) => res.status(500).json(err));
     },
     deleteAndRemoveReaction(req, res) {
-        Thought.deleteOne(
-            { _id: req.params.reaction_id },
+        Thought.findOneAndUpdate(
+            { _id: req.params.thought_id },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { new: true }
-        ).then((thought_id) => !thought_id ? res.status(404).json({ message: "Reaction removed" }) : res.json(thought_id))
+        ).then((reactions) => !reactions ? res.status(404).json({ message: "No reaction" }) : res.json(reactions))
             .catch((err) => res.status(500).json(err));
 
 
