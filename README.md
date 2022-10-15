@@ -19,4 +19,4 @@ Implement the MongoDB as the primary data base to reach the creation of the unst
 
 #### Video
 
-[TalkToMe Walkthrough](https://youtu.be/4e-GZUTrRpo)
+[TalkToMe Walkthrough](https://www.youtube.com/watch?v=LuS75sspqzQ)

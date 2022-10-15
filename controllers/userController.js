@@ -18,7 +18,7 @@ module.exports = {
                 res.status(500).json(err)
             })
 
-    },
+    }, 
 
     postNewUser(req, res) {
         User.create(req.body)

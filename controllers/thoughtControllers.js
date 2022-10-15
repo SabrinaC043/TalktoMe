@@ -34,7 +34,7 @@ module.exports = {
             { _id: req.params.thought_id },
             { $set: req.body },
             { new: true })
-            .then((thought_id) => !thought_id ? res.status(404).json({ message: "Thought has not been updated!" })
+            .then((thought_id) => !thought_id ? res.status(404).json({ message: "Thought has been updated!" })
                 : res.json(thought_id))
             .catch((err) => res.status(500).json(err));
     },
